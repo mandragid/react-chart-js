@@ -1,23 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import BarChart from "./components/BarChart";
+import { useEffect, useState } from "react";
+import { orderList } from "./const/OrderData";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function App() {
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "",
+        labelColor: ["blue", "red", "green"],
+        data: [],
+        backgroundColor: [],
+      },
+    ],
+  });
+
+  useEffect(() => {
+    setChartData({
+      labels: orderList.map((data) => data.date),
+      datasets: [
+        {
+          label: "data rental mobil",
+          labelColor: ["blue", "red", "green"],
+          data: orderList.map((data) => data.totalOrder),
+          backgroundColor: ["blue", "red", "green"],
+        },
+      ],
+    });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BarChart chartData={chartData} />
     </div>
   );
 }
